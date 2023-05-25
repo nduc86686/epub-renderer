@@ -1,0 +1,104 @@
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  
+  font-variation-settings: "opsz" 32;
+}
+
+html.dark {
+  background-color: rgb(254,252,237);
+  filter: invert(1) hue-rotate(0.5turn);
+  /* background-color: black; */
+}
+
+html.white {
+  background-color: white !important;
+}
+
+html.light {
+  background-color: rgb(254,252,237);
+}
+
+html.dark img,
+html.dark image {
+  filter: invert(1) hue-rotate(0.5turn);
+  max-width: 100%;
+  max-height: 100%;
+}
+
+a:link,
+a:visited {
+  color: #2c8dc2 !important;
+}
+
+* {
+  word-wrap: break-word !important;
+}
+
+@font-face {
+  font-family: "Merriweather";
+  src: url("/_fonts/variable/Merriweather.ttf") format("truetype-variations");
+}
+
+@font-face {
+  font-family: "Literata";
+  src: url("/_fonts/variable/Literata.ttf") format("truetype-variations");
+}
+
+@font-face {
+  font-family: "RobotoMono";
+  src: url("/_fonts/variable/RobotoMono.ttf") format("truetype-variations");
+}
+
+.__highlight-bold {
+  text-shadow: 1px 1px 1px white;
+}
+
+/*
+html.dark .__highlight-bold {
+  text-shadow: 1px 1px 1px white;
+}
+*/
+
+.__note-has-desc {
+  text-decoration-line: underline;
+}
+
+/* yellow */
+.__highlight-yellow {
+  background-color: rgb(254,225,142);
+  
+}
+
+html.dark .__highlight-yellow {
+  background-color: rgb(175,150,77);
+}
+
+/* green */
+.__highlight-green {
+  background-color: rgb(0, 255, 0);
+}
+
+html.dark .__highlight-green {
+  background-color: rgb(0, 96, 2);
+}
+
+/* blue */
+.__highlight-blue {
+  background-color: rgb(153,192,245);
+}
+
+html.dark .__highlight-blue {
+  background-color: rgb(96,133,174);
+}
+
+/* red */
+.__highlight-red {
+  background-color: rgb(245,169,164);
+}
+
+html.dark .__highlight-red {
+  background-color: rgb(167,102,97);
+}
