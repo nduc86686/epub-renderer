@@ -82,6 +82,7 @@ export const onPageNode = (
     notesData: NoteData[]
   ) => void
 ) => {
+  console.log('????');
   (window as any).pageNode = (
     pageFilePath: string,
     nodeIndex: number,

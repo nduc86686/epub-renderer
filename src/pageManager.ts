@@ -73,86 +73,30 @@ class PageManager {
     notifyLoad();
   }
 
-  // async processPage(page: Page) {
-  //   console.log("waiting for links to load");
-  //   await Promise.all(
-  //     Array.from(page.container.querySelectorAll("link"))
-  //       .filter((link) => link.getAttribute("type") == "text/css")
-  //       .map(
-  //         (link) =>
-  //           new Promise((resolve) => {
-  //             link.onload = link.onerror = resolve;
-  //           })
-  //       )
-  //   ).then(() => {
-  //     console.log("links finished loading");
-  //   });
-
-  //   console.log("waiting for images to load");
-  //   await Promise.all(
-  //     Array.from(page.container.querySelectorAll("img"))
-  //       .filter((img) => !img.complete)
-  //       .map(
-  //         (img) =>
-  //           new Promise((resolve) => {
-  //             img.onload = img.onerror = resolve;
-  //           })
-  //       )
-  //   ).then(() => {
-  //     console.log("images finished loading");
-  //   });
-
-  //   Array.from(page.container.getElementsByTagName("a")).forEach((a) => {
-  //     a.addEventListener("click", (e) => {
-  //       e.preventDefault();
-  //       const href = a.getAttribute("href");
-  //       if (href) {
-  //         let link: string;
-  //         link = href.trim();
-
-  //         if (!isUrlRegex.test(href)) {
-  //           switch (link[0]) {
-  //             case "#":
-  //               link = window.location.pathname + link;
-  //               break;
-  //             default:
-  //               link = urlJoin(window.location.pathname, "..", link);
-  //               break;
-  //           }
-  //         }
-
-  //         if (link[0] === "/") {
-  //           link = link.substring(1);
-  //         }
-
-  //         notifyLink(link);
-  //       }
-  //     });
-  //   });
-  // }
+ 
   async processPage(page: Page) {
     console.log("waiting for links and images to load");
-    // const linksPromises = Array.from(page.container.querySelectorAll("link"))
-    //   .filter((link) => link.getAttribute("type") === "text/css")
-    //   .map((link) => new Promise((resolve) => {
-    //     link.onload = link.onerror = resolve;
-    //   }));
+    const linksPromises = Array.from(page.container.querySelectorAll("link"))
+      .filter((link) => link.getAttribute("type") === "text/css")
+      .map((link) => new Promise((resolve) => {
+        link.onload = link.onerror = resolve;
+      }));
   
-    // const imagesPromises = Array.from(page.container.querySelectorAll("img"))
-    //   .filter((img) => !img.complete)
-    //   .map((img) => new Promise((resolve) => {
-    //     img.onload = img.onerror = resolve;
-    //   }));
+    const imagesPromises = Array.from(page.container.querySelectorAll("img"))
+      .filter((img) => !img.complete)
+      .map((img) => new Promise((resolve) => {
+        img.onload = img.onerror = resolve;
+      }));
   
-    // const promises = [...linksPromises, ...imagesPromises];
+    const promises = [...linksPromises, ...imagesPromises];
   
-    // await Promise.all(promises)
-    //   .then(() => {
-    //     console.log("links and images finished loading");
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error occurred while loading links and images", error);
-    //   });
+    await Promise.all(promises)
+      .then(() => {
+        console.log("links and images finished loading");
+      })
+      .catch((error) => {
+        console.error("Error occurred while loading links and images", error);
+      });
   
     Array.from(page.container.getElementsByTagName("a")).forEach((a) => {
       a.addEventListener("click", (e) => {
@@ -230,8 +174,7 @@ class PageManager {
     notifyNotePress(noteId);
   }
 
-  // Create a cache for fetched pages
-// public pageCache = {};
+  
 
 // async onPage(
 //   pageFilePath: string,

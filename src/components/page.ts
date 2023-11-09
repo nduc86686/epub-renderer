@@ -207,33 +207,48 @@ class Page {
   }[] = [];
 
   initialize = () => {
-    this._element.querySelectorAll("*").forEach((elem) => {
+    // Lấy tất cả các phần tử con một cách thông minh hơn
+    const elements = this._element.getElementsByTagName('*');
+  
+    // Tạo một mảng để chứa thông tin style
+    const pageElements = [];
+  
+    // Lặp qua từng phần tử để lấy thông tin style
+    for (let i = 0; i < elements.length; i++) {
+      const elem = elements[i];
       const styles = window.getComputedStyle(elem);
-      this._pageElements.push({
+      const originalStyles = {
+        fontSize: styles.fontSize,
+        lineHeight: styles.lineHeight,
+        letterSpacing: styles.letterSpacing,
+        wordSpacing: styles.wordSpacing,
+        fontWeight: Number(styles.fontWeight),
+        textAlign: styles.textAlign,
+        textIndent: styles.textIndent,
+        fontFamily: styles.fontFamily,
+        marginInLineStart: styles.marginInlineStart,
+      };
+  
+      // Thêm thông tin style vào mảng
+      pageElements.push({
         element: elem as HTMLElement,
-        originalStyles: {
-          fontSize: styles.fontSize,
-          lineHeight: styles.lineHeight,
-          letterSpacing: styles.letterSpacing,
-          wordSpacing: styles.wordSpacing,
-          fontWeight: Number(styles.fontWeight),
-          textAlign: styles.textAlign,
-          textIndent: styles.textIndent,
-          fontFamily: styles.fontFamily,
-          marginInLineStart: styles.marginInlineStart,
-        },
+        originalStyles,
       });
-    });
-
+    }
+  
+    // Gán mảng style vào thuộc tính của đối tượng
+    this._pageElements = pageElements;
+  
+    // Áp dụng style
     this.applyStyle();
-
-    this._innerPages = calculateInnerPages(
-      this._element,
-      this.style.margin.side
-    );
-
-    console.log(`inner pages: ${this._innerPages}`);
+  
+    // Tính toán trang nội
+    this._innerPages = calculateInnerPages(this._element, this.style.margin.side);
+  
+    // Log thông tin (có thể xem xét log trong môi trường phát triển, loại bỏ trong môi trường sản phẩm)
+    console.log(`inner pages pro: ${this._innerPages}`);
   };
+  
 
   getInnerPageFromInnerLocation = (innerLocation?: InnerLocation) => {
     if (innerLocation instanceof InnerPage) {
