@@ -73,39 +73,91 @@ class PageManager {
     notifyLoad();
   }
 
+  // async processPage(page: Page) {
+  //   console.log("waiting for links to load");
+  //   await Promise.all(
+  //     Array.from(page.container.querySelectorAll("link"))
+  //       .filter((link) => link.getAttribute("type") == "text/css")
+  //       .map(
+  //         (link) =>
+  //           new Promise((resolve) => {
+  //             link.onload = link.onerror = resolve;
+  //           })
+  //       )
+  //   ).then(() => {
+  //     console.log("links finished loading");
+  //   });
+
+  //   console.log("waiting for images to load");
+  //   await Promise.all(
+  //     Array.from(page.container.querySelectorAll("img"))
+  //       .filter((img) => !img.complete)
+  //       .map(
+  //         (img) =>
+  //           new Promise((resolve) => {
+  //             img.onload = img.onerror = resolve;
+  //           })
+  //       )
+  //   ).then(() => {
+  //     console.log("images finished loading");
+  //   });
+
+  //   Array.from(page.container.getElementsByTagName("a")).forEach((a) => {
+  //     a.addEventListener("click", (e) => {
+  //       e.preventDefault();
+  //       const href = a.getAttribute("href");
+  //       if (href) {
+  //         let link: string;
+  //         link = href.trim();
+
+  //         if (!isUrlRegex.test(href)) {
+  //           switch (link[0]) {
+  //             case "#":
+  //               link = window.location.pathname + link;
+  //               break;
+  //             default:
+  //               link = urlJoin(window.location.pathname, "..", link);
+  //               break;
+  //           }
+  //         }
+
+  //         if (link[0] === "/") {
+  //           link = link.substring(1);
+  //         }
+
+  //         notifyLink(link);
+  //       }
+  //     });
+  //   });
+  // }
   async processPage(page: Page) {
-    console.log("waiting for links to load");
-    await Promise.all(
-      Array.from(page.container.querySelectorAll("link"))
-        .filter((link) => link.getAttribute("type") == "text/css")
-        .map(
-          (link) =>
-            new Promise((resolve) => {
-              link.onload = link.onerror = resolve;
-            })
-        )
-    ).then(() => {
-      console.log("links finished loading");
-    });
-
-    console.log("waiting for images to load");
-    await Promise.all(
-      Array.from(page.container.querySelectorAll("img"))
-        .filter((img) => !img.complete)
-        .map(
-          (img) =>
-            new Promise((resolve) => {
-              img.onload = img.onerror = resolve;
-            })
-        )
-    ).then(() => {
-      console.log("images finished loading");
-    });
-
+    console.log("waiting for links and images to load");
+    // const linksPromises = Array.from(page.container.querySelectorAll("link"))
+    //   .filter((link) => link.getAttribute("type") === "text/css")
+    //   .map((link) => new Promise((resolve) => {
+    //     link.onload = link.onerror = resolve;
+    //   }));
+  
+    // const imagesPromises = Array.from(page.container.querySelectorAll("img"))
+    //   .filter((img) => !img.complete)
+    //   .map((img) => new Promise((resolve) => {
+    //     img.onload = img.onerror = resolve;
+    //   }));
+  
+    // const promises = [...linksPromises, ...imagesPromises];
+  
+    // await Promise.all(promises)
+    //   .then(() => {
+    //     console.log("links and images finished loading");
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error occurred while loading links and images", error);
+    //   });
+  
     Array.from(page.container.getElementsByTagName("a")).forEach((a) => {
       a.addEventListener("click", (e) => {
         e.preventDefault();
-        const href = a.getAttribute("href");
+                const href = a.getAttribute("href");
         if (href) {
           let link: string;
           link = href.trim();
@@ -127,9 +179,11 @@ class PageManager {
 
           notifyLink(link);
         }
+        // ... rest of your code for handling links
       });
     });
   }
+  
 
   quickClicked = false;
   selectionDelay: NodeJS.Timeout | null = null;
@@ -176,12 +230,107 @@ class PageManager {
     notifyNotePress(noteId);
   }
 
+  // Create a cache for fetched pages
+// public pageCache = {};
+
+// async onPage(
+//   pageFilePath: string,
+//   innerLocation: InnerLocation,
+//   forced: boolean,
+//   notesData: NoteData[]
+// ) {
+//   console.log(`onPage: ${pageFilePath}`);
+//   notesData.forEach(
+//     (note) =>
+//     (note.ranges = note.ranges.map(
+//       (range) =>
+//         new NoteRangeData(
+//           range.startNodeIndex,
+//           range.startOffset,
+//           range.endNodeIndex,
+//           range.endOffset
+//         )
+//     ))
+//   );
+
+//   if (this.makingPage) {
+//     this.queuedPage = { pageFilePath, innerLocation };
+//     return;
+//   }
+//   this.makingPage = true;
+
+//   // TODO check both innerLocation type and identifier
+//   if (
+//     forced ||
+//     innerLocation.identifier != this.pageInnerLocation?.identifier ||
+//     pageFilePath != this.pageFilePath
+//   ) {
+//     if (forced || pageFilePath != this.pageFilePath) {
+//       // Recreate the page if the html is different
+
+//       window.history.pushState("", "", "/");
+//       let html;
+//       const pageCache: {[key: string]: string} = this.pageCache;
+//       if (pageCache[pageFilePath]) {
+//         html = pageCache[pageFilePath];
+//       } else {
+//         html = await (await fetch(pageFilePath)).text();
+//         pageCache[pageFilePath] = html;
+//       }
+
+//       this.page?.destroy();
+//       this.pageFilePath = pageFilePath;
+//       window.history.pushState("", "", pageFilePath);
+
+//       this.page = new Page(
+//         this.parent,
+//         html!,
+//         this.style,
+//         notesData,
+//         this.onNotePress.bind(this)
+//       );
+
+//       // await this.processPage(this.page);
+//       this.page.initialize();
+//     }
+
+//     assert(this.page != null, "Page should not be null");
+
+//     this.pageInnerLocation = innerLocation;
+//     this.page.innerPage =
+//       this.page.getInnerPageFromInnerLocation(innerLocation);
+//     this.page.applyStyleShowInnerPage();
+//     console.log(`done load page:`);
+//     // console.log(
+//     //   "originalNodesData",
+//     //   this.page.originalNodesData
+//     //     .filter((n) => n.type === 3)
+//     //     .map((n) => n.parts[0].node)
+//     // );
+//   }
+
+//   this.makingPage = false;
+//   if (this.queuedPage) {
+//     this.onPage(
+//       this.queuedPage.pageFilePath,
+//       this.queuedPage.innerLocation,
+//       forced,
+//       notesData
+//     );
+//   } else {
+//     // ...
+//           this.onPageReady();
+//   }
+// }
+
+//ok
   async onPage(
     pageFilePath: string,
     innerLocation: InnerLocation,
     forced: boolean,
     notesData: NoteData[]
   ) {
+    console.log(`onPage: ${pageFilePath}`);
     notesData.forEach(
       (note) =>
       (note.ranges = note.ranges.map(
@@ -208,6 +357,7 @@ class PageManager {
       pageFilePath != this.pageFilePath
     ) {
       if (forced || pageFilePath != this.pageFilePath) {
+        console.log("pageFilePath", pageFilePath);
         // Recreate the page if the html is different
 
         window.history.pushState("", "", "/");
@@ -223,7 +373,7 @@ class PageManager {
           notesData,
           this.onNotePress.bind(this)
         );
-        await this.processPage(this.page);
+        // await this.processPage(this.page);
         this.page.initialize();
       }
 
@@ -233,12 +383,7 @@ class PageManager {
       this.page.innerPage =
         this.page.getInnerPageFromInnerLocation(innerLocation);
       this.page.applyStyleShowInnerPage();
-      // console.log(
-      //   "originalNodesData",
-      //   this.page.originalNodesData
-      //     .filter((n) => n.type === 3)
-      //     .map((n) => n.parts[0].node)
-      // );
+      console.log(`done load page:`);
     }
 
     this.makingPage = false;
@@ -253,6 +398,8 @@ class PageManager {
       this.onPageReady();
     }
   }
+
+  
 
   onStyle(style: StyleProperties) {
     this.style = style;

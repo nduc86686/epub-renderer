@@ -418,12 +418,19 @@ class Page {
       const nodeIndex = this.originalNodesData.findIndex((ogData) =>
         ogData.parts.some((part) => part.node === firstVisibleText[0])
       );
-
-      this.consistentInnerLocation = new InnerNode(
-        nodeIndex,
-        firstVisibleText[1] +
-          this.originalNodesData[nodeIndex].getOffsetOfNode(firstVisibleText[0])
-      );
+      if (this.originalNodesData[nodeIndex]) {
+        this.consistentInnerLocation = new InnerNode(
+          nodeIndex,
+          firstVisibleText[1] +
+            this.originalNodesData[nodeIndex].getOffsetOfNode(firstVisibleText[0])
+        );
+      }
+      
+      // this.consistentInnerLocation = new InnerNode(
+      //   nodeIndex,
+      //   firstVisibleText[1] +
+      //     this.originalNodesData[nodeIndex].getOffsetOfNode(firstVisibleText[0])
+      // );
     }
 
     this.passedAnchors = this._allAnchors

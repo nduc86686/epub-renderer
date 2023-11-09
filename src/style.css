@@ -81,43 +81,43 @@ html.dark .__highlight-bold {
 /* yellow */
 .__highlight-yellow {
   background-color: rgb(254,225,142);
-  padding:6px 0px;
+  padding:12px 0px;
 }
 
 html.dark .__highlight-yellow {
-  padding:6px 0px;
+  padding:12px 0px;
   background-color: rgb(175,150,77);
 }
 
 /* green */
 .__highlight-green {
-  padding:6px 0px;
+  padding:12px 0px;
   background-color: rgb(0, 255, 0);
 }
 
 html.dark .__highlight-green {
   background-color: rgb(0, 96, 2);
-  padding:6px 0px;
+  padding:12px 0px;
 }
 
 /* blue */
 .__highlight-blue {
   background-color: rgb(153,192,245);
-  padding:6px 0px;
+  padding:12px 0px;
 }
 
 html.dark .__highlight-blue {
   background-color: rgb(96,133,174);
-  padding:6px 0px;
+  padding:12px 0px;
 }
 
 /* red */
 .__highlight-red {
   background-color: rgb(245,169,164);
-  padding:6px 0px;
+  padding:12px 0px;
 }
 
 html.dark .__highlight-red {
   background-color: rgb(167,102,97);
-  padding:6px 0px;
+  padding:12px 0px;
 }
