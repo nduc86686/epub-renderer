@@ -1,4 +1,4 @@
-import urlJoin from "url-join";
+// import urlJoin from "url-join";
 import Page, { StyleProperties, StyleThemes } from "./components/page";
 import {
   notifyLoad,
@@ -12,7 +12,7 @@ import {
   onPageTextNode,
   onClearSelection,
   onStyle,
-  notifyLink,
+  // notifyLink,
   notifyNotePress,
 } from "./controllerCom";
 import InnerLocation from "./models/innerLocation";
@@ -21,7 +21,7 @@ import QuickSelection from "./quickSelection";
 import { assert } from "./utils/assert";
 import clearSelection from "./utils/clearSelection";
 
-const isUrlRegex = new RegExp("^(?:[a-z+]+:)?//", "i");
+// const isUrlRegex = new RegExp("^(?:[a-z+]+:)?//", "i");
 
 class PageManager {
   page: Page | null = null;
@@ -74,59 +74,59 @@ class PageManager {
   }
 
  
-  async processPage(page: Page) {
-    console.log("waiting for links and images to load");
-    const linksPromises = Array.from(page.container.querySelectorAll("link"))
-      .filter((link) => link.getAttribute("type") === "text/css")
-      .map((link) => new Promise((resolve) => {
-        link.onload = link.onerror = resolve;
-      }));
+  // async processPage(page: Page) {
+  //   console.log("waiting for links and images to load");
+  //   const linksPromises = Array.from(page.container.querySelectorAll("link"))
+  //     .filter((link) => link.getAttribute("type") === "text/css")
+  //     .map((link) => new Promise((resolve) => {
+  //       link.onload = link.onerror = resolve;
+  //     }));
   
-    const imagesPromises = Array.from(page.container.querySelectorAll("img"))
-      .filter((img) => !img.complete)
-      .map((img) => new Promise((resolve) => {
-        img.onload = img.onerror = resolve;
-      }));
+  //   const imagesPromises = Array.from(page.container.querySelectorAll("img"))
+  //     .filter((img) => !img.complete)
+  //     .map((img) => new Promise((resolve) => {
+  //       img.onload = img.onerror = resolve;
+  //     }));
   
-    const promises = [...linksPromises, ...imagesPromises];
+  //   const promises = [...linksPromises, ...imagesPromises];
   
-    await Promise.all(promises)
-      .then(() => {
-        console.log("links and images finished loading");
-      })
-      .catch((error) => {
-        console.error("Error occurred while loading links and images", error);
-      });
+  //   await Promise.all(promises)
+  //     .then(() => {
+  //       console.log("links and images finished loading");
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error occurred while loading links and images", error);
+  //     });
   
-    Array.from(page.container.getElementsByTagName("a")).forEach((a) => {
-      a.addEventListener("click", (e) => {
-        e.preventDefault();
-                const href = a.getAttribute("href");
-        if (href) {
-          let link: string;
-          link = href.trim();
+  //   Array.from(page.container.getElementsByTagName("a")).forEach((a) => {
+  //     a.addEventListener("click", (e) => {
+  //       e.preventDefault();
+  //               const href = a.getAttribute("href");
+  //       if (href) {
+  //         let link: string;
+  //         link = href.trim();
 
-          if (!isUrlRegex.test(href)) {
-            switch (link[0]) {
-              case "#":
-                link = window.location.pathname + link;
-                break;
-              default:
-                link = urlJoin(window.location.pathname, "..", link);
-                break;
-            }
-          }
+  //         if (!isUrlRegex.test(href)) {
+  //           switch (link[0]) {
+  //             case "#":
+  //               link = window.location.pathname + link;
+  //               break;
+  //             default:
+  //               link = urlJoin(window.location.pathname, "..", link);
+  //               break;
+  //           }
+  //         }
 
-          if (link[0] === "/") {
-            link = link.substring(1);
-          }
+  //         if (link[0] === "/") {
+  //           link = link.substring(1);
+  //         }
 
-          notifyLink(link);
-        }
-        // ... rest of your code for handling links
-      });
-    });
-  }
+  //         notifyLink(link);
+  //       }
+  //       // ... rest of your code for handling links
+  //     });
+  //   });
+  // }
   
 
   quickClicked = false;

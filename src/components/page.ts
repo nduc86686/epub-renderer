@@ -207,46 +207,32 @@ class Page {
   }[] = [];
 
   initialize = () => {
-    // Lấy tất cả các phần tử con một cách thông minh hơn
-    const elements = this._element.getElementsByTagName('*');
-  
-    // Tạo một mảng để chứa thông tin style
-    const pageElements = [];
-  
-    // Lặp qua từng phần tử để lấy thông tin style
-    for (let i = 0; i < elements.length; i++) {
-      const elem = elements[i];
+    this._element.querySelectorAll("*").forEach((elem) => {
       const styles = window.getComputedStyle(elem);
-      const originalStyles = {
-        fontSize: styles.fontSize,
-        lineHeight: styles.lineHeight,
-        letterSpacing: styles.letterSpacing,
-        wordSpacing: styles.wordSpacing,
-        fontWeight: Number(styles.fontWeight),
-        textAlign: styles.textAlign,
-        textIndent: styles.textIndent,
-        fontFamily: styles.fontFamily,
-        marginInLineStart: styles.marginInlineStart,
-      };
-  
-      // Thêm thông tin style vào mảng
-      pageElements.push({
+      this._pageElements.push({
         element: elem as HTMLElement,
-        originalStyles,
+        originalStyles: {
+          fontSize: styles.fontSize,
+          lineHeight: styles.lineHeight,
+          letterSpacing: styles.letterSpacing,
+          wordSpacing: styles.wordSpacing,
+          fontWeight: Number(styles.fontWeight),
+          textAlign: styles.textAlign,
+          textIndent: styles.textIndent,
+          fontFamily: styles.fontFamily,
+          marginInLineStart: styles.marginInlineStart,
+        },
       });
-    }
-  
-    // Gán mảng style vào thuộc tính của đối tượng
-    this._pageElements = pageElements;
-  
-    // Áp dụng style
+    });
+
     this.applyStyle();
-  
-    // Tính toán trang nội
-    this._innerPages = calculateInnerPages(this._element, this.style.margin.side);
-  
-    // Log thông tin (có thể xem xét log trong môi trường phát triển, loại bỏ trong môi trường sản phẩm)
-    console.log(`inner pages pro: ${this._innerPages}`);
+
+    this._innerPages = calculateInnerPages(
+      this._element,
+      this.style.margin.side
+    );
+
+    console.log(`inner pages: ${this._innerPages}`);
   };
   
 
